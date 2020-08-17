@@ -1,6 +1,50 @@
 server:
   port: 8080
-spring:  cloud:    config:      server:        git:          uri: https://github.com/ChinaJavaProgrammer/config.git
+  
+spring:  application:
+    name: microservice-simple-config
+  profiles:
+    active: native   
+  rabbitmq:
+    host: 192.168.60.204
+    port: 5672
+    username: guest
+    password: guest  security:
+   basic:
+    enabled: true
+   user:      name: user
+      password: configadmin
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info
+logging:
+  level:
+    org.springframework.cloud:  DEBUG
+    org.springframework.boot: DEBUG  
+
+---
+
+spring:
+  profiles: git  cloud:    config:      server:        git:          uri: https://gitee.com/dai_hu/config.git
           username: 823898876@qq.com
-          password: a823898876    consul:      host:   application:    name: microservice-simple-config
-      
+          password: a823898876
+          repos:
+            team-a:
+              clone-on-start: true
+              uri: https://gitee.com/dai_hu/config.git
+    consul:
+      port: 8500
+      host: localhost           
+---
+
+spring:
+  profiles: native
+  cloud:
+    config:
+      server:
+        native:          search-locations: classpath:config/
+    consul:
+      port: 8500
+      host: localhost

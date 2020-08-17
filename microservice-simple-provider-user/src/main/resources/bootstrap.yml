@@ -1,2 +1,30 @@
 server:
   port: 8099
+  
+spring:  profiles:    active: local  application:    name: microservice-simple-provider-user
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info
+---
+spring:  profiles: local  cloud:    config:      profile: local      uri:      - http://user:configadmin@localhost:8080
+      label: master
+--- 
+spring:
+  profiles: dev
+  cloud:
+    config:
+      profile: dev
+      uri:
+      - http://user:configadmin@localhost:8080 
+      label: master
+--- 
+
+spring:  profiles: production
+  cloud:
+    config:
+      profile: production
+      uri:
+      - http://user:configadmin@localhost:8080   
+      label: master  
