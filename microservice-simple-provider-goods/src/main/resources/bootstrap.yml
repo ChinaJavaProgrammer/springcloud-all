@@ -1,0 +1,34 @@
+server:
+  port: 8010
+  
+spring:  profiles:    active: local  application:    name: microservice-simple-provider-goods
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,info
+logging:  level:
+    root: INFO    com.itmuch.cloud.feign: DEBUG
+    org.springframework.cloud.sleuth: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+---
+spring:  profiles: local  cloud:    config:      profile: local      uri:      - http://user:configadmin@localhost:8080
+      label: master
+--- 
+spring:
+  profiles: dev
+  cloud:
+    config:
+      profile: dev
+      uri:
+      - http://user:configadmin@localhost:8080 
+      label: master
+--- 
+
+spring:  profiles: production
+  cloud:
+    config:
+      profile: production
+      uri:
+      - http://user:configadmin@localhost:8080   
+      label: master  
