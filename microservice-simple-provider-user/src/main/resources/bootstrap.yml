@@ -28,3 +28,14 @@ spring:  profiles: production
       uri:
       - http://user:configadmin@localhost:8080   
       label: master  
+      
+--- 
+
+spring:
+  profiles: docker
+  cloud:
+    config:
+      profile: docker
+      uri:
+      - http://user:configadmin@spring-cloud-config-server:8080   
+      label: master  

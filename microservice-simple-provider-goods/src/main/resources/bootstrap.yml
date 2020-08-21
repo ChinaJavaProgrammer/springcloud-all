@@ -1,7 +1,7 @@
 server:
   port: 8010
   
-spring:  profiles:    active: local  application:    name: microservice-simple-provider-goods
+spring:  profiles:    active: vm  application:    name: microservice-simple-provider-goods
 management:
   endpoints:
     web:
@@ -11,6 +11,7 @@ logging:  level:
     root: INFO    com.itmuch.cloud.feign: DEBUG
     org.springframework.cloud.sleuth: DEBUG
     org.springframework.web.servlet.DispatcherServlet: DEBUG
+  file: sss.log
 ---
 spring:  profiles: local  cloud:    config:      profile: local      uri:      - http://user:configadmin@localhost:8080
       label: master
@@ -32,3 +33,26 @@ spring:  profiles: production
       uri:
       - http://user:configadmin@localhost:8080   
       label: master  
+      
+---
+
+spring:
+  profiles: vm
+  cloud:
+    config:
+      profile: vm
+      uri:
+      - http://user:configadmin@192.168.40.184:8080   
+      label: master  
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    config:
+      profile: docker
+      uri:
+      - http://user:configadmin@spring-cloud-config-server:8080   
+      label: master  
+

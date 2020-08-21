@@ -21,8 +21,8 @@ management:
         include: refresh,health,info
 logging:
   level:
-    org.springframework.cloud:  DEBUG
-    org.springframework.boot: DEBUG  
+    org.springframework.cloud:  INFO
+    org.springframework.boot: INFO  
 
 ---
 
@@ -47,4 +47,16 @@ spring:
         native:          search-locations: classpath:config/
     consul:
       port: 8500
-      host: localhost
+      host: 192.168.60.204
+---
+
+spring:
+  profiles: docker
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:config/
+    consul:
+      port: 8500
+      host: docker-consul

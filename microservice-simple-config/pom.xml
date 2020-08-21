@@ -23,4 +23,57 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- maven构建docker镜像 -->
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				 <version>1.2.2</version>
+				 <!-- 将步骤package绑定一个goal执行build 当执行mvn clean package 等价于 mvn clean package:build -->
+				 <executions>
+				 	<execution>
+				 		<id>build-image</id>
+				 		<phase>package</phase>
+				 		<goals>
+				 			<goal>build</goal>
+				 		</goals>
+				 	</execution>
+				 </executions>
+				 <configuration>
+				 	<!-- 镜像名称 -->
+				 	<imageName>823898876/spring-cloud-cluster:spring-cloud-config-server.0.0.1</imageName>
+				 	<imageTags>
+				 		<imageTag>0.0.1</imageTag>
+				 		<imageTag>latest</imageTag>
+				 	</imageTags>
+				 	<!-- 以下配置均可用 dockerDirectory 带提 -->
+				 	<!-- 指定基础镜像等价于FROM指令 -->
+				 	<!-- <baseImage>java</baseImage> -->
+				 	<!-- docker 的 ENTRYPOINT指令 -->
+				 	<!-- 指明Dockerfile的所在目录-->
+				 	<dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+				 	<resources>
+				 		<resource>
+				 			<targetPath>/</targetPath>
+				 			<!-- 需要指定复制的根目录 ${project.build.directory}表示target目录 -->
+				 			<directory>${project.build.directory}</directory>
+				 			<!-- 用于指定需要复制的文件 ${project.build.finalName}.jar指的是打包之后的jar包文件-->
+				 			<include>${project.build.finalName}.jar</include>
+				 		</resource>
+				 	</resources>
+				 	<!-- 指定需要推送的docker主机位置 -->
+				 	<dockerHost>http://192.168.60.204:2375</dockerHost>
+				 	<!-- 与maven配置文件setting.xml中配置的server.id一致，用于推送镜像 -->
+				 	<serverId>docker-hub</serverId>
+				 	<!-- 覆盖每次构建相同标签的镜像 -->
+				 	<forceTags>true</forceTags>
+				 </configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
